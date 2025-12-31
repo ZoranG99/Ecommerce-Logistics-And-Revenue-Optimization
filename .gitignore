@@ -2,8 +2,14 @@
 **/*.csv
 **/*.zip
 
-# 2. Ignore everything inside the data folder
-data/
+# 2. Allow the data folder itself to be tracked
+!data/
+!data/raw/
+!data/processed/
 
-# 3. Allow .gitkeep files through the filter
+# 3. Ignore everything INSIDE those folders
+data/raw/*
+data/processed/*
+
+# 4. Do NOT ignore the .gitkeep files (this keeps the folders "non-empty")
 !.gitkeep
