@@ -1,0 +1,9 @@
+# 1. Ignore all CSV and ZIP files everywhere
+**/*.csv
+**/*.zip
+
+# 2. Ignore everything inside the data folder
+data/
+
+# 3. Allow .gitkeep files through the filter
+!.gitkeep
