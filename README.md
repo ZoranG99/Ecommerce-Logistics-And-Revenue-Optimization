@@ -4,14 +4,13 @@
 
 ## 📖 Table of Contents
 - [Dashboard Demo](#-dashboard-demo)
-- [Repository Structure](#-repository-structure)
 - [Business Problem](#-business-problem)
-- [Data Source](#-data-source)
-- [Solution Architecture](#-solution-architecture)
-- [Data Modeling (Star Schema)](#-data-modeling-star-schema)
-- [Visual Insights (Q&A)](#-visual-insights-qa)
 - [Strategic Recommendations](#-strategic-recommendations)
+- [Visual Insights (Q&A)](#-visual-insights-qa)
+- [System Architecture & Data Modeling](#-system-architecture--data-modeling)
 - [Technical Highlights (Code)](#-technical-highlights-code)
+- [Data Source](#-data-source)
+- [Repository Structure](#-repository-structure)
 - [Assumptions & Caveats](#-assumptions--caveats)
 - [Setup & Usage](#-setup--usage)
 - [Future Improvements](#-future-improvements)
@@ -24,22 +23,6 @@
 
 *Click the yellow button above to interact with the dashboard directly.*               
 
-## 📂 Repository Structure
-```text
-Ecommerce-Logistics-And-Revenue-Optimization/
-├── assets/                          # Images and GIFs for the README
-├── dashboard/
-│   └── olist_ecommerce.pbix         # Power BI Project File
-├── data/                            # Data directory (Folders only, datasets ignored)
-│   ├── processed/                   # Cleaned data ready for analysis
-│   └── raw/                         # Original, unaltered datasets
-├── scripts/
-│   ├── 01_etl_pipeline.ipynb        # Python ETL (Pandas)
-│   └── 02_warehouse_schema.sql      # SQL DDL & Import Scripts
-├── .gitignore                       # Rules to exclude datasets from GitHub
-└── README.md                        # Project Documentation
-```
-
 ## 💼 Business Problem
 **Olist**, a Brazilian e-commerce marketplace, faced two critical challenges:
 1.  **Stagnating Customer Satisfaction:** Average review scores stuck at **4.1/5.0** despite revenue growth.
@@ -47,23 +30,20 @@ Ecommerce-Logistics-And-Revenue-Optimization/
 
 **Goal:** Build a scalable BI solution to diagnose the root causes of negative reviews and optimize logistics performance.
 
-## 📊 Data Source
-The dataset used in this project is the **Brazilian E-Commerce Public Dataset by Olist**, which can be found on [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). It contains information on 100,000 orders from 2016 to 2018 made at multiple marketplaces in Brazil.
+## 💡 Strategic Recommendations
+Based on the data insights, I recommend the following actions to improve Olist's operational performance:
 
-## 🏗 Solution Architecture
-This project follows a professional **ETL (Extract, Transform, Load)** workflow:
+1.  **Logistics Optimization (North East Region):**
+    * **Problem:** Alagoas (AL) and Rio de Janeiro (RJ) have high failure rates (24% and 13% late deliveries).
+    * **Action:** Renegotiate Service Level Agreements (SLAs) with carriers in these specific states. Consider onboarding localized "last-mile" carriers for the North East to bypass the current bottlenecks.
 
-1.  **Python (Pandas):** Ingested 9 raw CSV files, handled missing values, translated categories (Portuguese -> English), and standardized timestamp formats.
-2.  **PostgreSQL (Data Warehouse):** Designed a relational database to store the clean data.
-3.  **SQL (Star Schema):** Modeled the data into Fact and Dimension tables to optimize performance.
-4.  **Power BI:** Built the front-end visualization with complex DAX measures (Time Intelligence, UserRelationship).
+2.  **Seller Quality Enforcement:**
+    * **Problem:** A small segment of sellers accounts for a disproportionate number of 1-star reviews due to "non-shipping" (orders never sent).
+    * **Action:** Implement an automated alert system to flag sellers who fail to ship within 48 hours. If a seller's late rate exceeds a 10% threshold, temporarily suspend their account to protect the platform's reputation.
 
-## 📐 Data Modeling (Star Schema)
-I designed a **Star Schema** with a central Fact Table (`Orders`) connected to key Dimensions (`Customers`, `Products`, `Sellers`, `Dates`).
-
-![Data Model](assets/data_model.png)
-* **Key Feature:** Used `USERELATIONSHIP` in DAX to handle both "Order Date" and "Delivery Date" on a single timeline using active/inactive relationships.
-* **Snowflake Design:** The `Geolocation` table filters both `Customers` and `Sellers` to enable precise map visualizations across the entire supply chain.
+3.  **Customer Expectations Management:**
+    * **Problem:** 5-star reviews have an average delivery of 10 days, while the estimated delivery shown to users is often 18+ days.
+    * **Action:** Update the "Estimated Delivery Date" calculation on the checkout page to be more aggressive for high-performing routes. Reducing the "Promised Time" can increase conversion rates without risking satisfaction, provided the logistics stay consistent.
 
 ## 📊 Visual Insights (Q&A)
 
@@ -91,20 +71,21 @@ I designed a **Star Schema** with a central Fact Table (`Orders`) connected to k
 * **Data:** Just 3 categories (**Health & Beauty, Watches, Bed & Bath**) account for ~40% of total revenue.
 * **Action:** Marketing spend should be focused on these high-LTV (Lifetime Value) categories rather than spread thinly across the entire catalog.
 
-## 💡 Strategic Recommendations
-Based on the data insights, I recommend the following actions to improve Olist's operational performance:
+## 🏗 System Architecture & Data Modeling
+### Solution Architecture
+This project follows a professional **ETL (Extract, Transform, Load)** workflow:
 
-1.  **Logistics Optimization (North East Region):**
-    * **Problem:** Alagoas (AL) and Rio de Janeiro (RJ) have high failure rates (24% and 13% late deliveries).
-    * **Action:** Renegotiate Service Level Agreements (SLAs) with carriers in these specific states. Consider onboarding localized "last-mile" carriers for the North East to bypass the current bottlenecks.
+1.  **Python (Pandas):** Ingested 9 raw CSV files, handled missing values, translated categories (Portuguese -> English), and standardized timestamp formats.
+2.  **PostgreSQL (Data Warehouse):** Designed a relational database to store the clean data.
+3.  **SQL (Star Schema):** Modeled the data into Fact and Dimension tables to optimize performance.
+4.  **Power BI:** Built the front-end visualization with complex DAX measures (Time Intelligence, UserRelationship).
 
-2.  **Seller Quality Enforcement:**
-    * **Problem:** A small segment of sellers accounts for a disproportionate number of 1-star reviews due to "non-shipping" (orders never sent).
-    * **Action:** Implement an automated alert system to flag sellers who fail to ship within 48 hours. If a seller's late rate exceeds a 10% threshold, temporarily suspend their account to protect the platform's reputation.
+### Data Modeling (Star Schema)
+I designed a **Star Schema** with a central Fact Table (`Orders`) connected to key Dimensions (`Customers`, `Products`, `Sellers`, `Dates`).
 
-3.  **Customer Expectations Management:**
-    * **Problem:** 5-star reviews have an average delivery of 10 days, while the estimated delivery shown to users is often 18+ days.
-    * **Action:** Update the "Estimated Delivery Date" calculation on the checkout page to be more aggressive for high-performing routes. Reducing the "Promised Time" can increase conversion rates without risking satisfaction, provided the logistics stay consistent.
+![Data Model](assets/data_model.png)
+* **Key Feature:** Used `USERELATIONSHIP` in DAX to handle both "Order Date" and "Delivery Date" on a single timeline using active/inactive relationships.
+* **Snowflake Design:** The `Geolocation` table filters both `Customers` and `Sellers` to enable precise map visualizations across the entire supply chain.
 
 ## 💻 Technical Highlights (Code)
 
@@ -137,6 +118,34 @@ VAR OnTimeOrders =
     )
 RETURN 
     DIVIDE(OnTimeOrders, TotalDelivered)
+```
+
+### 3. Python: Business Logic & Data Auditing
+I implemented deep logical checks to ensure data integrity before warehouse ingestion. For example, flagging "Time Travel" errors where delivery occurred before the purchase.
+
+```python
+# Filtering out invalid business records
+invalid_dates = df[df['order_delivered_customer_date'] < df['order_purchase_timestamp']]
+print(f"Logic Errors Detected: {len(invalid_dates)} rows")
+```
+
+## 📊 Data Source
+The dataset used in this project is the **Brazilian E-Commerce Public Dataset by Olist**, which can be found on [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). It contains information on 100,000 orders from 2016 to 2018 made at multiple marketplaces in Brazil.
+
+## 📂 Repository Structure
+```text
+Ecommerce-Logistics-And-Revenue-Optimization/
+├── assets/                          # Images and GIFs for the README
+├── dashboard/
+│   └── olist_ecommerce.pbix         # Power BI Project File
+├── data/                            # Data directory (Folders only, datasets ignored)
+│   ├── processed/                   # Cleaned data ready for analysis
+│   └── raw/                         # Original, unaltered datasets
+├── scripts/
+│   ├── 01_etl_pipeline.ipynb        # Python ETL (Pandas)
+│   └── 02_warehouse_schema.sql      # SQL DDL & Import Scripts
+├── .gitignore                       # Rules to exclude datasets from GitHub
+└── README.md                        # Project Documentation
 ```
 
 ## ⚠️ Assumptions & Caveats
