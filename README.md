@@ -24,24 +24,24 @@
 *Click the yellow button above to interact with the dashboard directly.*               
 
 ## 💼 Business Problem
-**Olist**, a Brazilian e-commerce marketplace, faced two critical challenges:
+**Olist, a Brazilian e-commerce marketplace, faced two critical challenges**
 1.  **Stagnating Customer Satisfaction:** Average review scores stuck at **4.1/5.0** despite revenue growth.
 2.  **Logistics Opacity:** Operations teams lacked visibility into which states were causing delivery delays, leading to increased churn.
 
 **Goal:** Build a scalable BI solution to diagnose the root causes of negative reviews and optimize logistics performance.
 
 ## 💡 Strategic Recommendations
-Based on the data insights, I recommend the following actions to improve Olist's operational performance:
+Based on the data insights, I recommend the following actions to improve Olist's operational performance.
 
-1.  **Logistics Optimization (North East Region):**
+1.  **Logistics Optimization (North East Region)**
     * **Problem:** Alagoas (AL) and Rio de Janeiro (RJ) have high failure rates (24% and 13% late deliveries).
     * **Action:** Renegotiate Service Level Agreements (SLAs) with carriers in these specific states. Consider onboarding localized "last-mile" carriers for the North East to bypass the current bottlenecks.
 
-2.  **Seller Quality Enforcement:**
+2.  **Seller Quality Enforcement**
     * **Problem:** A small segment of sellers accounts for a disproportionate number of 1-star reviews due to "non-shipping" (orders never sent).
     * **Action:** Implement an automated alert system to flag sellers who fail to ship within 48 hours. If a seller's late rate exceeds a 10% threshold, temporarily suspend their account to protect the platform's reputation.
 
-3.  **Customer Expectations Management:**
+3.  **Customer Expectations Management**
     * **Problem:** 5-star reviews have an average delivery of 10 days, while the estimated delivery shown to users is often 18+ days.
     * **Action:** Update the "Estimated Delivery Date" calculation on the checkout page to be more aggressive for high-performing routes. Reducing the "Promised Time" can increase conversion rates without risking satisfaction, provided the logistics stay consistent.
 
@@ -73,12 +73,15 @@ Based on the data insights, I recommend the following actions to improve Olist's
 
 ## 🏗 System Architecture & Data Modeling
 ### Solution Architecture
-This project follows a professional **ETL (Extract, Transform, Load)** workflow:
-
-1.  **Python (Pandas):** Ingested 9 raw CSV files, handled missing values, translated categories (Portuguese -> English), and standardized timestamp formats.
-2.  **PostgreSQL (Data Warehouse):** Designed a relational database to store the clean data.
-3.  **SQL (Star Schema):** Modeled the data into Fact and Dimension tables to optimize performance.
-4.  **Power BI:** Built the front-end visualization with complex DAX measures (Time Intelligence, UserRelationship).
+This project follows a professional **ETL (Extract, Transform, Load)** workflow.
+1.  **Python (Pandas)** 
+    * Ingested 9 raw CSV files, handled missing values, translated categories (Portuguese -> English), and standardized timestamp formats.
+2.  **PostgreSQL (Data Warehouse)** 
+    * Designed a relational database to store the clean data.
+3.  **SQL (Star Schema)** 
+    * Modeled the data into Fact and Dimension tables to optimize performance.
+4.  **Power BI** 
+    * Built the front-end visualization with complex DAX measures (Time Intelligence, UserRelationship).
 
 ### Data Modeling (Star Schema)
 I designed a **Star Schema** with a central Fact Table (`Orders`) connected to key Dimensions (`Customers`, `Products`, `Sellers`, `Dates`).
@@ -149,30 +152,36 @@ Ecommerce-Logistics-And-Revenue-Optimization/
 ```
 
 ## ⚠️ Assumptions & Caveats
-* **Currency:** The source dataset is in Brazilian Reals (BRL). For this case study, values are formatted as **USD ($)** to simulate a US-based executive view.
-* **Missing Data:** ~0.2% of orders had missing geolocation data. These were excluded from map visuals to maintain accuracy but retained in revenue calculations to ensure total financial integrity.
-* **Data Date Range:** The dataset covers historical records from 2016–2018. Recent market trends or 2025 inflation data are not reflected in this analysis.
+* **Currency** 
+    * The source dataset is in Brazilian Reals (BRL). For this case study, values are formatted as **USD ($)** to simulate a US-based executive view.
+* **Missing Data** 
+    * ~0.2% of orders had missing geolocation data. These were excluded from map visuals to maintain accuracy but retained in revenue calculations to ensure total financial integrity.
+* **Data Date Range** 
+    * The dataset covers historical records from 2016–2018. Recent market trends or 2025 inflation data are not reflected in this analysis.
 
 ## ⚙️ Setup & Usage
-**Prerequisites:** Python 3.x, PostgreSQL, Power BI Desktop.
-1. **Download the Data:**
+**Prerequisites** Python 3.x, PostgreSQL, Power BI Desktop.
+1. **Download the Data**
     * Download the raw CSV files from the [Olist Brazilian E-Commerce Dataset on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
     * Place the files inside the `data/raw/` directory.
-2.  **Run the ETL Pipeline:**
+2.  **Run the ETL Pipeline**
     * Navigate to the `scripts/` folder.
     * Open and run `01_etl_pipeline.ipynb` to clean the raw data and generate the optimized CSV exports.
-3.  **Build the Data Warehouse:**
+3.  **Build the Data Warehouse**
     * Open `scripts/02_warehouse_schema.sql` in your SQL editor (pgAdmin or DBeaver).
     * Execute the script to create the Star Schema tables and import the cleaned data.
-4.  **Explore the Dashboard:**
+4.  **Explore the Dashboard**
     * Open `dashboard/olist_ecommerce.pbix` in Power BI Desktop.
     * *Note:* You may need to update the **Data Source Settings** to point to your local PostgreSQL instance and click **Refresh**.
 
 ## 🚀 Future Improvements
-To evolve this project into a production-grade enterprise solution, the following steps are planned:
-* **Predictive Analytics:** Integrate a machine learning model (Scikit-Learn) to forecast delivery delays before they happen based on seller and carrier historical data.
-* **CI/CD Pipeline:** Automate the ETL process using **GitHub Actions** or **Apache Airflow** to ensure the dashboard always reflects the latest available data.
-* **Cloud Integration:** Migrate the local PostgreSQL database to **AWS RDS** or **Azure SQL Database** for better accessibility and scalability.
+To evolve this project into a production-grade enterprise solution, the following steps are planned.
+* **Predictive Analytics** 
+    * Integrate a machine learning model (Scikit-Learn) to forecast delivery delays before they happen based on seller and carrier historical data.
+* **CI/CD Pipeline** 
+    * Automate the ETL process using **GitHub Actions** or **Apache Airflow** to ensure the dashboard always reflects the latest available data.
+* **Cloud Integration** 
+    * Migrate the local PostgreSQL database to **AWS RDS** or **Azure SQL Database** for better accessibility and scalability.
 
 ## 👤 Author
 **Zoran Gusic**
